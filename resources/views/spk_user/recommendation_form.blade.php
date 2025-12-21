@@ -3,9 +3,7 @@
 
     <div class="max-w-4xl mx-auto">
 
-        <!-- 1. KARTU PROFIL USER (Tanpa Foto) -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6 relative overflow-hidden">
-            <!-- Hiasan Background -->
             <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-50 rounded-full blur-2xl"></div>
 
             <div class="relative z-10">
@@ -20,16 +18,12 @@
                     {{ Auth::user()->email }}
                 </div>
                 
-                <!-- Badges Status & Umur -->
-                <!-- Jika data kosong, badge akan menampilkan placeholder -->
                 <div class="flex flex-wrap gap-2">
-                    <!-- Badge Status -->
                     <span class="inline-flex items-center px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold border border-indigo-100 gap-1.5">
                         <span class="material-symbols-rounded text-sm">badge</span>
                         {{ Auth::user()->status ?? 'Status (-)' }}
                     </span>
 
-                    <!-- Badge Umur -->
                     <span class="inline-flex items-center px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-bold border border-purple-100 gap-1.5">
                         <span class="material-symbols-rounded text-sm">cake</span>
                         {{ Auth::user()->age ?? '-' }} Tahun
@@ -38,9 +32,7 @@
             </div>
         </div>
         
-        <!-- 2. LOGIC: Tampilan Berbeda untuk User Baru vs User Lama (Edit Mode) -->
         @if(isset($lastPreferences) && $lastPreferences)
-            <!-- TAMPILAN MODE EDIT -->
             <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 mb-8 rounded-r-lg flex flex-col sm:flex-row items-start gap-4 shadow-sm animate-fade-in">
                 <div class="p-2 bg-yellow-100 rounded-full text-yellow-600 shrink-0">
                     <span class="material-symbols-rounded text-2xl">edit_document</span>
@@ -54,7 +46,6 @@
                 </div>
             </div>
         @else
-            <!-- TAMPILAN MODE BARU -->
             <div class="bg-blue-50 border-l-4 border-blue-600 p-6 mb-8 rounded-r-lg shadow-sm">
                 <h2 class="text-xl font-bold text-blue-800 mb-2">Temukan Produk Tepat Untukmu!</h2>
                 <p class="text-blue-700">
@@ -71,7 +62,6 @@
                 @foreach($criterias as $c)
                 
                 @php
-                    // LOGIKA PRE-FILLED (PENGISIAN OTOMATIS):
                     $savedValue = 3; 
 
                     if(old('weights.'.$c->id)) {

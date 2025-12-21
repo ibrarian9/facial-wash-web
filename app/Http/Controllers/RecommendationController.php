@@ -9,7 +9,7 @@ use App\Models\UserRecommendation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class RecommendationController extends Controller
+class RecommendationController 
 {
     public function index()
     {
@@ -41,14 +41,19 @@ class RecommendationController extends Controller
         foreach ($criterias as $c) {
             $weight = $userWeight[$c->id] ?? 1;
             $norm = $weight / $totalUserWeight;
+
             $pangkat = ($c->type == 'cost') ? -$norm : $norm;
+
             $normalizedWeights[$c->id] = [
+                'awal' => $weight,
+                'norm' => $norm,
                 'pangkat' => $pangkat
             ];
         }
 
         $vectorS = [];
         $totalS = 0;
+        $matrix = [];
 
         foreach ($alternatives as $a) {
             $S = 1;
@@ -58,6 +63,8 @@ class RecommendationController extends Controller
                     ->first();
 
                 $val = $scoreRow ? $scoreRow->value : 1;
+
+                $matrix[$a->id][$c->id] = $val;
 
                 $pow = pow($val, $normalizedWeights[$c->id]['pangkat']);
                 $S *= $pow;
@@ -72,9 +79,12 @@ class RecommendationController extends Controller
             $V = ($totalS > 0) ? ($vectorS[$a->id] / $totalS) : 0;
 
             $recommendations[] = [
+                'id' => $a->id,
                 'code' => $a->code,
                 'name' => $a->name,
-                'score' => $V * 100
+                'score' => $V * 100,
+                'vector_v' => $V,
+                'vector_s' => $vectorS[$a->id]
             ];
         }
 
@@ -95,6 +105,14 @@ class RecommendationController extends Controller
         }
 
         // Kembalikan ke View Hasil
-        return view('spk_user.recommendation_result', compact('recommendations'));
+        return view('spk_user.recommendation_result', compact(
+            'recommendations',
+            'alternatives',
+            'criterias',
+            'matrix',
+            'normalizedWeights',
+            'vectorS',
+            'totalS'
+        ));
     }
 }

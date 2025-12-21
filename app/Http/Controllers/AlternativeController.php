@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Alternative;
 use Illuminate\Http\Request;
 
-class AlternativeController extends Controller
+class AlternativeController
 {
 
     public function alternatives()

@@ -8,7 +8,7 @@ use App\Models\Score;
 use App\Models\UserRecommendation;
 use Illuminate\Http\Request;
 
-class SpkController extends Controller
+class SpkController
 {
     public function index()
     {
