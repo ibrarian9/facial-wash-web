@@ -9,7 +9,7 @@ use App\Models\UserRecommendation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class RecommendationController 
+class RecommendationController
 {
     public function index()
     {
@@ -73,7 +73,6 @@ class RecommendationController
             $totalS += $S;
         }
 
-        // --- LANGKAH 4: HITUNG VEKTOR V (Ranking) ---
         $recommendations = [];
         foreach ($alternatives as $a) {
             $V = ($totalS > 0) ? ($vectorS[$a->id] / $totalS) : 0;
@@ -88,23 +87,23 @@ class RecommendationController
             ];
         }
 
-        // Urutkan Ranking (Terbesar ke Terkecil)
         usort($recommendations, function ($a, $b) {
             return $b['score'] <=> $a['score'];
         });
 
         if (count($recommendations) > 0) {
-            UserRecommendation::create([
-                'user_id' => Auth::id(),
-                'respondent_name' => Auth::getName() ?? 'Guest',
-                'top_product_name' => $recommendations[0]['name'],
-                'score' => $recommendations[0]['score'],
-                'input_criteria' => $request->except(['_token']),
-                'full_result_data' => $recommendations
-            ]);
+            UserRecommendation::updateOrCreate(
+                ['user_id' => Auth::id()],
+                [
+                    'respondent_name' => Auth::user()->name,
+                    'top_product_name' => $recommendations[0]['name'],
+                    'score' => $recommendations[0]['score'],
+                    'input_criteria' => $request->except(['_token']),
+                    'full_result_data' => $recommendations
+                ]
+            );
         }
 
-        // Kembalikan ke View Hasil
         return view('spk_user.recommendation_result', compact(
             'recommendations',
             'alternatives',

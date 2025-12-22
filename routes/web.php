@@ -51,6 +51,7 @@ Route::middleware('auth')->prefix('spk')->name('spk.')->group(function () {
         Route::get('/perhitungan-master', [SpkController::class, 'calculation'])->name('calculation');
         Route::get('/laporan-rekomendasi', [SpkController::class, 'report'])->name('report');
         Route::get('/laporan-responden', [SpkController::class, 'responden'])->name('responden');
+        Route::get('/laporan-responden/{id}', [SpkController::class, 'respondenDetail'])->name('respondenDetail');
     });
 
     Route::middleware('role:user')->group(function () {

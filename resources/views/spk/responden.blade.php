@@ -22,6 +22,7 @@
                         <th class="px-6 py-4 min-w-[350px]">Detail Preferensi (Bobot)</th>
                         <th class="px-6 py-4 min-w-[200px]">Hasil Rekomendasi</th>
                         <th class="px-6 py-4">Waktu</th>
+                        <th class="px-6 py-4 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -69,9 +70,7 @@
                                 
                                 @php
                                     $inputData = $item->input_criteria ?? [];
-                                    // Ambil array weights terpisah
                                     $weights = $inputData['weights'] ?? [];
-                                    // Data selain weights (jika ada input lain)
                                     $otherData = array_diff_key($inputData, array_flip(['_token', '_method', 'weights']));
                                 @endphp
 
@@ -173,6 +172,14 @@
                             <div>
                                 {{ $item->created_at->format('H:i') }} WIB
                             </div>
+                        </td>
+
+                        <!-- KOLOM 5: Detail -->
+                        <td class="px-6 py-4 text-center align-top">
+                            <a href="{{ route('spk.respondenDetail', $item->id) }}" class="inline-flex items-center gap-1 text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors">
+                                <span class="material-symbols-rounded text-sm">visibility</span>
+                                Detail
+                            </a>
                         </td>
                     </tr>
                     @empty
